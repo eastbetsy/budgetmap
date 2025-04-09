@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Get started with BudgetMap - Set your financial goals and budget rules">
+    <title>BudgetMap Onboarding</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <nav class="navbar" aria-label="Main navigation">
+            <div class="logo">
+                <a href="index.html">BudgetMap</a>
+            </div>
+            <button class="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+                <span class="menu-icon"></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="chat.html">Chat</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact Dev</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="onboarding-content">
+        <section class="header">
+            <h1>Hi, I am Map, your personal chatbot!</h1>
+        </section>
+
+        <section id="chat-container">
+            <div id="messages" aria-live="polite">Enter your full name to get started.</div>
+            
+            <div id="goal-buttons" aria-labelledby="goal-heading">
+                <h2 id="goal-heading" class="visually-hidden">Select your financial goal</h2>
+                <div class="button-grid">
+                    <button class="goal-button" data-goal="Emergency Fund">Emergency Fund</button>
+                    <button class="goal-button" data-goal="Vacation">Vacation</button>
+                    <button class="goal-button" data-goal="New Car">Buy Car</button>
+                    <button class="goal-button" data-goal="New House">Buy House</button>
+                    <button class="goal-button" data-goal="Pay Off Debt">Get Out of Debt</button>
+                    <button class="goal-button" data-goal="Large Purchase">Large Purchase</button>
+                    <button class="goal-button" data-goal="Other">Other</button>
+                </div>
+            </div>
+            
+            <div id="rule-buttons" aria-labelledby="rule-heading">
+                <h2 id="rule-heading" class="visually-hidden">Select your budgeting rule</h2>
+                <div class="button-grid">
+                    <button class="savings-rule" data-rule="50/30/20">50/30/20 Rule</button>
+                    <button class="savings-rule" data-rule="80/20">80/20 Rule</button>
+                    <button class="savings-rule" data-rule="70/20/10">70/20/10 Rule</button>
+                    <button class="savings-rule" data-rule="60/20/20">60/20/20 Rule</button>
+                    <button class="savings-rule" data-rule="30/30/30/10">30/30/30/10 Rule</button>
+                </div>
+            </div>
+            
+            <form id="input-container" onsubmit="sendMessage(); return false;">
+                <label for="message-input" class="visually-hidden">Enter your name</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="message-input" 
+                        placeholder="First and last name" 
+                        autocomplete="name" 
+                        aria-required="true" 
+                        required
+                    >
+                </div>
+                <button type="submit">Send</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
