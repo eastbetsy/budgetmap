@@ -294,3 +294,390 @@
       overflow: visible;
     }
   }
+
+/*dashboard */
+#dashboard-content {
+    padding: var(--spacing-md);
+  }
+  
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .dashboard-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+  
+  .refresh-btn {
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+  
+  #time-period {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--background-white);
+  }
+  
+  /* Card container and card styles */
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+  }
+  
+  .card {
+    background-color: var(--background-white);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .card-header {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+  
+  .card-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--text-dark);
+  }
+  
+  .card-body {
+    padding: var(--spacing-md);
+  }
+  
+  .card-footer {
+    padding: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+    text-align: right;
+  }
+  
+  .card-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-speed);
+  }
+  
+  .card-link:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+  }
+  
+  /* Summary card styles */
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .summary-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  
+  .summary-label {
+    font-weight: 500;
+  }
+  
+  .summary-value {
+    font-weight: 700;
+  }
+  
+  /* Budget progress card styles */
+  .progress-item {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .progress-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xs);
+    font-size: 0.9rem;
+  }
+  
+  .progress-bar {
+    height: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+  }
+  
+  /* Goal card styles */
+  .goal-details {
+    text-align: center;
+  }
+  
+  .goal-progress {
+    margin: var(--spacing-md) 0;
+  }
+  
+  .circular-progress {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary-color) 65%, #e9ecef 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .circular-progress::before {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: white;
+  }
+  
+  .progress-text {
+    position: relative;
+    z-index: 1;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .goal-info p {
+    margin: var(--spacing-xs) 0;
+  }
+  
+  /* Transactions card styles */
+  .transaction-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .transaction {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .transaction:last-child {
+    border-bottom: none;
+  }
+  
+  .transaction-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    margin-right: var(--spacing-sm);
+  }
+  
+  .transaction-icon.grocery {
+    background-color: #e3f2fd;
+  }
+  
+  .transaction-icon.utility {
+    background-color: #fff3e0;
+  }
+  
+  .transaction-icon.income {
+    background-color: #e8f5e9;
+  }
+  
+  .transaction-details {
+    flex-grow: 1;
+  }
+  
+  .transaction-details h4 {
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  .transaction-details p {
+    margin: var(--spacing-xs) 0 0;
+    font-size: 0.8rem;
+    color: #6c757d;
+  }
+  
+  .transaction-amount {
+    font-weight: 700;
+  }
+  
+  .transaction-amount.expense {
+    color: #d32f2f;
+  }
+  
+  .transaction-amount.income {
+    color: #388e3c;
+  }
+  
+  /* Chart card styles */
+  .chart-container {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .pie-chart-placeholder {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .slice {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .slice1 {
+    clip-path: polygon(50% 50%, 50% 0%, 0% 0%, 0% 100%, 50% 100%);
+    background-color: #2196F3;
+    transform: rotate(0deg);
+  }
+  
+  .slice2 {
+    clip-path: polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%);
+    background-color: #FF9800;
+    transform: rotate(0deg);
+  }
+  
+  .slice3 {
+    clip-path: polygon(50% 50%, 100% 0%, 100% 50%, 50% 50%);
+    background-color: #4CAF50;
+    transform: rotate(0deg);
+  }
+  
+  .slice4 {
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%);
+    background-color: #9C27B0;
+    transform: rotate(0deg);
+  }
+  
+  .chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: var(--spacing-md);
+  }
+  
+  .legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: var(--spacing-xs);
+  }
+  
+  .legend-color.housing {
+    background-color: #2196F3;
+  }
+  
+  .legend-color.food {
+    background-color: #FF9800;
+  }
+  
+  .legend-color.transport {
+    background-color: #4CAF50;
+  }
+  
+  .legend-color.other {
+    background-color: #9C27B0;
+  }
+  
+  /* Tips card styles */
+  .tip {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm);
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius-sm);
+  }
+  
+  .tip:last-child {
+    margin-bottom: 0;
+  }
+  
+  .tip.alert {
+    background-color: #fff8e1;
+  }
+  
+  .tip-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    margin-right: var(--spacing-sm);
+    flex-shrink: 0;
+  }
+  
+  .tip-icon.warning {
+    background-color: #ff9800;
+  }
+  
+  .tip p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .card-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .dashboard-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--spacing-md);
+    }
+    
+    .dashboard-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .chart-legend {
+      flex-direction: column;
+    }
+  }
