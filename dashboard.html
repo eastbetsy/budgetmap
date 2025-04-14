@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BudgetMap - Dashboard</title>
+    <meta name="description" content="BudgetMap Dashboard">
+    <title>BudgetMap Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="preload" href="scripts/dashboard.js" as="script">
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
     <header>
         <nav class="navbar" aria-label="Main navigation">
             <div class="logo">
-                <a href="index.html" aria-label="BudgetMap Home"><img src="budgetmap.png" alt="BudgetMap Logo"></a>
+                <a href="index.html">BudgetMap</a>
             </div>
             <button class="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
                 <span class="menu-icon"></span>
@@ -28,141 +30,214 @@
     </header>
 
     <main id="dashboard-content">
-        <div class="dashboard-header">
-            <h1>Financial Dashboard - April 2025</h1>
+        <section class="dashboard-header">
+            <h1>Your Financial Dashboard</h1>
             <div class="dashboard-actions">
-                <button id="refresh-btn" class="refresh-btn" aria-label="Refresh dashboard data">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M23 4v6h-6"></path>
-                        <path d="M1 20v-6h6"></path>
-                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"></path>
-                        <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"></path>
-                    </svg>
+                <button class="refresh-btn" aria-label="Refresh dashboard">
+                    <span class="icon-refresh"></span>
                 </button>
+                <select id="time-period" aria-label="Select time period">
+                    <option value="month">This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="year">This Year</option>
+                </select>
             </div>
-        </div>
+        </section>
 
-        <div class="card-container">
-            <!-- Account Summary Card -->
-            <div class="card account-summary loading">
+        <section class="card-container">
+            <!-- Summary Card -->
+            <div class="card summary-card">
                 <div class="card-header">
                     <h2>Account Summary</h2>
                 </div>
                 <div class="card-body">
                     <div class="summary-item">
-                        <span class="summary-label">Checking</span>
-                        <span id="checking-balance" class="summary-value">$0.00</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Savings</span>
-                        <span id="savings-balance" class="summary-value">$0.00</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Credit Card</span>
-                        <span id="credit-balance" class="summary-value negative">$0.00</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Net Worth</span>
-                        <span id="net-worth" class="summary-value">$0.00</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Monthly Overview Card -->
-            <div class="card monthly-overview-card loading">
-                <div class="card-header">
-                    <h2>Monthly Overview</h2>
-                </div>
-                <div class="card-body">
-                    <div class="month-header">
-                        <h3 id="month-name">April 2025</h3>
-                    </div>
-                    <div class="summary-item">
                         <span class="summary-label">Income</span>
-                        <span id="total-income" class="summary-value income">$0.00</span>
+                        <span class="summary-value">$4,500</span>
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Expenses</span>
-                        <span id="total-expenses" class="summary-value expense">$0.00</span>
+                        <span class="summary-value">$3,250</span>
                     </div>
                     <div class="summary-item">
-                        <span class="summary-label">Net Savings</span>
-                        <span id="net-savings" class="summary-value">$0.00</span>
+                        <span class="summary-label">Savings</span>
+                        <span class="summary-value">$1,250</span>
                     </div>
-                    <div class="savings-progress-container">
-                        <div class="progress-header">
-                            <span>Savings Goal</span>
-                            <span id="savings-goal">$0.00</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div id="savings-progress" class="progress-fill"></div>
-                        </div>
-                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="card-link">View Details</a>
                 </div>
             </div>
 
             <!-- Budget Progress Card -->
-            <div class="card budget-progress-card loading">
+            <div class="card budget-card">
                 <div class="card-header">
                     <h2>Budget Progress</h2>
                 </div>
                 <div class="card-body">
-                    <div class="overall-budget">
+                    <div class="progress-item">
                         <div class="progress-header">
-                            <span>Overall Budget</span>
-                            <span id="budget-overall-spent">$0.00 of $0.00</span>
+                            <span>Housing</span>
+                            <span>$1,200 / $1,500</span>
                         </div>
                         <div class="progress-bar">
-                            <div id="budget-progress-bar" class="progress-fill"></div>
-                        </div>
-                        <div class="progress-percentage">
-                            <span id="budget-overall-percent">0%</span>
+                            <div class="progress-fill" style="width: 80%;"></div>
                         </div>
                     </div>
-                    
-                    <div id="budget-list" class="budget-categories">
-                        <!-- Budget categories will be added here dynamically -->
+                    <div class="progress-item">
+                        <div class="progress-header">
+                            <span>Food</span>
+                            <span>$450 / $600</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%;"></div>
+                        </div>
                     </div>
-                    
-                    <div id="budget-warnings" class="budget-warnings">
-                        <!-- Budget warnings will be added here dynamically -->
+                    <div class="progress-item">
+                        <div class="progress-header">
+                            <span>Transportation</span>
+                            <span>$300 / $400</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%;"></div>
+                        </div>
                     </div>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="card-link">Manage Budget</a>
+                </div>
+            </div>
+
+            <!-- Savings Goal Card -->
+            <div class="card goal-card">
+                <div class="card-header">
+                    <h2>Savings Goal</h2>
+                </div>
+                <div class="card-body">
+                    <div class="goal-details">
+                        <h3>Emergency Fund</h3>
+                        <div class="goal-progress">
+                            <div class="circular-progress">
+                                <span class="progress-text">65%</span>
+                            </div>
+                        </div>
+                        <div class="goal-info">
+                            <p>Saved: $6,500</p>
+                            <p>Target: $10,000</p>
+                            <p>Remaining: $3,500</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="card-link">Update Goal</a>
                 </div>
             </div>
 
             <!-- Recent Transactions Card -->
-            <div class="card transactions-card loading">
+            <div class="card transactions-card">
                 <div class="card-header">
                     <h2>Recent Transactions</h2>
                 </div>
                 <div class="card-body">
-                    <ul id="transactions-list" class="transaction-list">
-                        <!-- Transactions will be added here dynamically -->
+                    <ul class="transaction-list">
+                        <li class="transaction">
+                            <div class="transaction-icon grocery"></div>
+                            <div class="transaction-details">
+                                <h4>Grocery Store</h4>
+                                <p>Apr 6, 2025</p>
+                            </div>
+                            <div class="transaction-amount expense">-$85.23</div>
+                        </li>
+                        <li class="transaction">
+                            <div class="transaction-icon utility"></div>
+                            <div class="transaction-details">
+                                <h4>Electric Bill</h4>
+                                <p>Apr 5, 2025</p>
+                            </div>
+                            <div class="transaction-amount expense">-$120.50</div>
+                        </li>
+                        <li class="transaction">
+                            <div class="transaction-icon income"></div>
+                            <div class="transaction-details">
+                                <h4>Paycheck</h4>
+                                <p>Apr 1, 2025</p>
+                            </div>
+                            <div class="transaction-amount income">+$2,250.00</div>
+                        </li>
                     </ul>
                 </div>
                 <div class="card-footer">
-                    <a href="transactions.html" class="card-link">View All Transactions</a>
+                    <a href="#" class="card-link">View All Transactions</a>
                 </div>
             </div>
-        </div>
+
+            <!-- Expense Analysis Card -->
+            <div class="card analysis-card">
+                <div class="card-header">
+                    <h2>Expense Breakdown</h2>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <!-- Placeholder for chart -->
+                        <div class="chart-placeholder">
+                            <div class="pie-chart-placeholder">
+                                <div class="slice slice1"></div>
+                                <div class="slice slice2"></div>
+                                <div class="slice slice3"></div>
+                                <div class="slice slice4"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color housing"></span>
+                            <span class="legend-label">Housing (45%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color food"></span>
+                            <span class="legend-label">Food (15%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color transport"></span>
+                            <span class="legend-label">Transport (12%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color other"></span>
+                            <span class="legend-label">Other (28%)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="card-link">Full Analysis</a>
+                </div>
+            </div>
+
+            <!-- Tips Card -->
+            <div class="card tips-card">
+                <div class="card-header">
+                    <h2>Budget Tips</h2>
+                </div>
+                <div class="card-body">
+                    <div class="tip">
+                        <div class="tip-icon"></div>
+                        <p>You could save $150 by reducing your dining out expenses.</p>
+                    </div>
+                    <div class="tip alert">
+                        <div class="tip-icon warning"></div>
+                        <p>Your entertainment spending is 30% over budget this month.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="card-link">Get More Tips</a>
+                </div>
+            </div>
+        </section>
     </main>
-
-    <!-- Loading Indicator -->
-    <div id="loading-indicator" class="loading-overlay">
-        <div class="spinner"></div>
-    </div>
-
-    <!-- Error Toast -->
-    <div id="error-toast" class="error-toast">
-        <div class="error-icon">!</div>
-        <div id="error-message" class="error-message">Error loading data</div>
-        <button class="close-toast" onclick="this.parentElement.classList.remove('show')">×</button>
-    </div>
 
     <footer>
         <p>&copy; 2025 BudgetMap. All rights reserved.</p>
     </footer>
 
-    <script type="module" src="scripts/dashboard.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
