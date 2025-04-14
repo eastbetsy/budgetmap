@@ -45,5 +45,12 @@
     </footer>
 
     <script src="script.js" defer></script>
+    <!--plaid api link integration-->
+    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+    <!--csp to prevent code injection attacks-->
+    default-src https://cdn.plaid.com/;
+    script-src 'unsafe-inline' https://cdn.plaid.com/link/v2/stable/link-initialize.js;
+    frame-src https://cdn.plaid.com/;
+    connect-src https://sandbox.plaid.com;
 </body>
 </html>
