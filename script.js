@@ -191,3 +191,214 @@ function handleResponse(message) {
             break;
     }
 }
+
+// AWS Lambda Function Code
+const mysql = require('mysql2/promise');
+const plaid = require('plaid'); // Make sure to add this dependency to your Lambda
+
+// Initialize Plaid client
+const plaidClient = new plaid.PlaidApi(
+  new plaid.Configuration({
+    basePath: plaid.PlaidEnvironments.sandbox, // Change to development or production as needed
+    baseOptions: {
+      headers: {
+        'PLAID-CLIENT-ID': process.env.PLAID_CLIENT_ID,
+        'PLAID-SECRET': process.env.PLAID_SECRET,
+      },
+    },
+  })
+);
+
+// Create a database connection pool
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
+
+exports.handler = async (event) => {
+  try {
+    // Parse the incoming webhook data
+    const body = JSON.parse(event.body);
+    console.log('Received webhook:', body);
+
+    // Process webhook based on webhook_type and webhook_code
+    if (body.webhook_type === 'TRANSACTIONS' && 
+        (body.webhook_code === 'INITIAL_UPDATE' || 
+         body.webhook_code === 'HISTORICAL_UPDATE' || 
+         body.webhook_code === 'DEFAULT_UPDATE')) {
+      
+      const itemId = body.item_id;
+      
+      // Get access token from your secure storage
+      const accessToken = await getAccessTokenForItemId(itemId);
+      
+      if (!accessToken) {
+        console.error('No access token found for item_id:', itemId);
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ error: 'Invalid item_id' }),
+          headers: { 'Content-Type': 'application/json' }
+        };
+      }
+      
+      // Calculate date 30 days ago for transactions request
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 30);
+      const endDate = new Date();
+      
+      // Format dates as YYYY-MM-DD
+      const startDateStr = startDate.toISOString().split('T')[0];
+      const endDateStr = endDate.toISOString().split('T')[0];
+      
+      // Get transactions from Plaid
+      const transactionsResponse = await plaidClient.transactionsGet({
+        access_token: accessToken,
+        start_date: startDateStr,
+        end_date: endDateStr,
+        options: {
+          include_personal_finance_category: true
+        }
+      });
+      
+      const transactions = transactionsResponse.data.transactions;
+      
+      // Store transactions in MySQL
+      await storeTransactionsInMySQL(itemId, transactions);
+      
+      console.log(`Successfully stored ${transactions.length} transactions for item ${itemId}`);
+    }
+    
+    // Return success response
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ received: true }),
+      headers: { 'Content-Type': 'application/json' }
+    };
+  } catch (error) {
+    console.error('Error processing webhook:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Failed to process webhook' }),
+      headers: { 'Content-Type': 'application/json' }
+    };
+  } finally {
+    // Clean up any connections to avoid memory leaks
+    pool.end();
+  }
+};
+
+async function getAccessTokenForItemId(itemId) {
+  // Retrieve the access token from MySQL
+  try {
+    const [rows] = await pool.execute(
+      'SELECT access_token FROM plaid_items WHERE item_id = ?',
+      [itemId]
+    );
+    
+    return rows.length > 0 ? rows[0].access_token : null;
+  } catch (error) {
+    console.error('Error retrieving access token:', error);
+    return null;
+  }
+}
+
+async function storeTransactionsInMySQL(itemId, transactions) {
+  // Use a connection from the pool
+  const connection = await pool.getConnection();
+  
+  try {
+    // Start a transaction
+    await connection.beginTransaction();
+    
+    for (const transaction of transactions) {
+      // Check if transaction already exists
+      const [existingRows] = await connection.execute(
+        'SELECT transaction_id FROM plaid_transactions WHERE transaction_id = ?',
+        [transaction.transaction_id]
+      );
+      
+      if (existingRows.length > 0) {
+        // Update existing transaction
+        await connection.execute(`
+          UPDATE plaid_transactions SET
+            account_id = ?,
+            amount = ?,
+            date = ?,
+            name = ?,
+            merchant_name = ?,
+            category = ?,
+            pending = ?,
+            transaction_type = ?,
+            payment_channel = ?,
+            authorized_date = ?,
+            transaction_data = ?,
+            updated_at = NOW()
+          WHERE transaction_id = ?
+        `, [
+          transaction.account_id,
+          transaction.amount,
+          transaction.date,
+          transaction.name,
+          transaction.merchant_name || null,
+          JSON.stringify(transaction.category),
+          transaction.pending ? 1 : 0,
+          transaction.transaction_type,
+          transaction.payment_channel,
+          transaction.authorized_date || null,
+          JSON.stringify(transaction),
+          transaction.transaction_id
+        ]);
+      } else {
+        // Insert new transaction
+        await connection.execute(`
+          INSERT INTO plaid_transactions (
+            transaction_id, 
+            item_id,
+            account_id, 
+            amount, 
+            date, 
+            name,
+            merchant_name,
+            category,
+            pending,
+            transaction_type,
+            payment_channel,
+            authorized_date,
+            transaction_data,
+            created_at,
+            updated_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+        `, [
+          transaction.transaction_id,
+          itemId,
+          transaction.account_id,
+          transaction.amount,
+          transaction.date,
+          transaction.name,
+          transaction.merchant_name || null,
+          JSON.stringify(transaction.category),
+          transaction.pending ? 1 : 0,
+          transaction.transaction_type,
+          transaction.payment_channel,
+          transaction.authorized_date || null,
+          JSON.stringify(transaction)
+        ]);
+      }
+    }
+    
+    // Commit the transaction
+    await connection.commit();
+  } catch (error) {
+    // If error, rollback changes
+    await connection.rollback();
+    throw error;
+  } finally {
+    // Release the connection back to the pool
+    connection.release();
+  }
+}
