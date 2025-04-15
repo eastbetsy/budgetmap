@@ -38,19 +38,44 @@
                 <a href="about.html" class="btn btn-secondary">Learn More</a>
             </div>
         </section>
+
+        <!-- Plaid Link Section -->
+        <section class="plaid-section">
+            <div class="container">
+                <h2>Connect Your Bank Account</h2>
+                <p>Securely connect your bank accounts to get personalized budget recommendations based on your spending habits.</p>
+                
+                <div class="plaid-container">
+                    <button id="plaid-link-button" class="btn btn-primary">Connect Your Bank</button>
+                    <div id="plaid-link-status"></div>
+                </div>
+                
+                <div class="security-note">
+                    <p><strong>Security Note:</strong> BudgetMap uses Plaid's secure API to connect to your financial institutions. Your credentials are never stored on our servers.</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2025 BudgetMap. All rights reserved.</p>
     </footer>
 
-    <script src="script.js" defer></script>
-    <!--plaid api link integration-->
+    <!-- Plaid API Script -->
     <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
-    <!--csp to prevent code injection attacks-->
-    default-src https://cdn.plaid.com/;
-    script-src 'unsafe-inline' https://cdn.plaid.com/link/v2/stable/link-initialize.js;
-    frame-src https://cdn.plaid.com/;
-    connect-src https://sandbox.plaid.com;
+    
+    <!-- Main app script -->
+    <script src="script.js" defer></script>
+    
+    <!-- Plaid Link initialization script -->
+    <script src="plaidlinkinit.js"></script>
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' https://cdn.plaid.com/;
+        script-src 'self' 'unsafe-inline' https://cdn.plaid.com/link/v2/stable/link-initialize.js;
+        frame-src https://cdn.plaid.com/;
+        connect-src https://sandbox.plaid.com;
+    ">
 </body>
 </html>
