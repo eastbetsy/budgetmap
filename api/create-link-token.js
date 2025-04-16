@@ -1,4 +1,4 @@
-const { Configuration, PlaidApi, PlaidEnvironments } = require('plaid');
+import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
 
 const configuration = new Configuration({
   basePath: PlaidEnvironments[process.env.PLAID_ENV || 'sandbox'],
@@ -12,7 +12,7 @@ const configuration = new Configuration({
 
 const plaidClient = new PlaidApi(configuration);
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', 'https://eastbetsy.github.io');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
